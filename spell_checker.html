@@ -69,7 +69,7 @@
 
     document.getElementById('checkButton').onclick = function() {
         const input = document.getElementById('wordInput').value.trim();
-        if(!inputWord) return alert('Please enter a word');
+        if(!input) return alert('Please enter a word');
 
         const suggestions = findSuggestions(inputWord);
         const suggestionsList = document.getElementById('suggestions');
