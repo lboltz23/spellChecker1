@@ -77,7 +77,7 @@
         const suggestions = findSuggestions(input);
         const suggestionsList = document.getElementById('suggestions');
         suggestionsList.innerHTML = suggestions
-        .map(function(word) {return `<li>${word}</li>`;})
+        .map(function(word) {return '<li>${word}</li>';})
         .join('');
     };
 
