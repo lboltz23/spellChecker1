@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content = "width = device-width, initial-scale=1.0">
+    <title>Spell Checker</title>
+
+</head>
+<body>
+    <h1>Spell Checker</h1>
+    <input type="text" id = "wordInput" placeholder="Enter a word">
+    <button id = "checkButton">Get suggestions</button>
+    <ul id="suggestions"></ul>
+
+
+<script>
+    let dictionary = [];
+
+    fetch('dictionary.txt')
+    .then(response => response.text())
+    .then(data => {
+        dictionary = data.split('\n').map(word => word.trim());
+        console.log('Dictionary loaded: ', dictionary.length, 'words');
+
+    })
+
+    function findPenalty(word1, word2){
+        const n = word1.length;
+        const m = word2.length;
+        const dp = [];
+
+        for(let i = 0; i <= n; i++){
+            dp[i] = Array(m + 1).fill(0);
+        }
+
+       for(let i = 0; i <= n; i++) dp[i][0] = i * 2;
+       for(let j = 0; j <= m; j++) dp[0][j] = j * 2;
+       
+       for(let i = 1; i <= n; i++) {
+        for (let j= 1; j <= m; j++) {
+            const match = word1[i - 1] === word2[j - 1] ? 0:
+                (isVowel(word1[i - 1]) === isVowel(word2[j-1]) ? 1: 3);
+            dp[i][j] = Math.min(
+                dp[i - 1][j - 1] + match,
+                dp[i - 1][j] + 2,
+                dp[i][j-1] + 2
+            );
+        }
+       }
+       return dp[n][m];
+    }
+
+    function findSuggestions(inputWord){
+        const scores = dictionary.map(word => ({
+            word,
+            score: findPenalty(inputWord, word)
+        }));
+
+        scores.sort((a, b) => a.score - b.score);
+        return scores.slice(0, 10).map(entry => entry.word);
+
+
+
+    }
+
+    function isVowel(char){
+        return 'aeiouAEIOU'.includes(char);
+    }
+
+    document.getElementById('checkButton').onclick = function() {
+        const input = document.getElementById('wordInput').value.trim();
+        if(!inputWord) return alert('Please enter a word');
+
+        const suggestions = findSuggestions(inputWord);
+        const suggestionsList = document.getElementById('suggestions');
+        suggestionsList.innerHTML = suggestions
+        .map(function(word) {return `<li>${word}</li>`;})
+        .join('');
+    };
+
+</script>
+</body>
+</html>
