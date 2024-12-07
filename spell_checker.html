@@ -26,7 +26,7 @@
     .catch(error => {
         console.error('Error loading dictionary:', error);
     });
-    
+
     function findPenalty(word1, word2){
         const n = word1.length;
         const m = word2.length;
@@ -74,7 +74,7 @@
         const input = document.getElementById('wordInput').value.trim();
         if(!input) return alert('Please enter a word');
 
-        const suggestions = findSuggestions(inputWord);
+        const suggestions = findSuggestions(input);
         const suggestionsList = document.getElementById('suggestions');
         suggestionsList.innerHTML = suggestions
         .map(function(word) {return `<li>${word}</li>`;})
