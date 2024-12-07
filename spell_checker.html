@@ -109,16 +109,20 @@
     }
 
     function findSuggestions(inputWord){
-        const scores = dictionary.map(word => ({
-            word,
-            score: findPenalty(inputWord, word)
-        }));
+        const scores = [];
+        for(let i = 0; i<dictionary.length; i++){
+            const word = dictionary[i];
+            const score = findPenalty(inputWord, word);
+            scores.push({word, score});
+        }
+        
+        scores.sort(function(a, b){
+          return a.score - b.score;
+        });
 
-        scores.sort((a, b) => a.score - b.score);
-        return scores.slice(0, 10).map(entry => entry.word);
-
-
-
+        return scores.slice(0, 10).map(function(entry) {
+            return entry.word;
+        });
     }
 
     function isVowel(char){
