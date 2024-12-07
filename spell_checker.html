@@ -41,9 +41,17 @@
        
        for(let i = 1; i <= n; i++) {
         for (let j= 1; j <= m; j++) {
-            const match = word1[i - 1] === word2[j - 1] ? 0:
-                (isVowel(word1[i - 1]) === isVowel(word2[j-1]) ? 1: 3);
-            dp[i][j] = Math.min(
+            let match = 0;
+
+            if (word1[i - 1] === word2[j - 1]) {
+                match = 0;
+            }else if(isVowel(word1[i - 1]) === isVowel(word2[j-1])){
+                match = 1;
+            }else{
+                match = 3;
+            }
+        
+                dp[i][j] = Math.min(
                 dp[i - 1][j - 1] + match,
                 dp[i - 1][j] + 2,
                 dp[i][j-1] + 2
